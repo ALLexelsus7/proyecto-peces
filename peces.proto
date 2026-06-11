@@ -1,0 +1,42 @@
+// Definicion basica del archivo + los datos del pez
+syntax = "proto3";
+
+package peces;
+
+// Aqui se define la estrucutra del pez, con sus atributos basicos.
+message Pez {
+  string id = 1;
+  string nombre_comun = 2;
+  string especie = 3;
+  string descripcion = 4;
+  double precio = 5;
+  int32 stock = 6;
+  repeated string categoria = 7; // Listas de categorías (ej: costa, zona_hadal, oceanico)
+  repeated string estado = 8; // Listas de estados (ej: ornamental, consumo)
+  string imagen_url = 9;
+  bool activo = 10; // Para marcar si el pez está activo o no (en caso de eliminación lógica)
+}
+
+// Peticiones y Respuestas del CRUD
+message CreatePezRequest {
+  string nombre_comun = 1;
+  string especie = 2;
+  string descripcion = 3;
+  double precio = 4;
+  int32 stock = 5;
+  repeated string categoria = 6;
+  repeated string estado = 7;
+  string imagen_url = 8;
+}
+
+message ReadPezRequest { string id = 1; }
+message UpdatePezRequest { Pez pez = 1; }
+message DeletePezRequest { string id = 1; }
+message DeletePezResponse { bool success = 1; string mensaje = 2; }
+
+service PezService {
+  rpc CreatePez (CreatePezRequest) returns (Pez);
+  rpc ReadPez (ReadPezRequest) returns (Pez);
+  rpc UpdatePez (UpdatePezRequest) returns (Pez);
+  rpc DeletePez (DeletePezRequest) returns (DeletePezResponse);
+}

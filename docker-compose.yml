@@ -1,0 +1,26 @@
+version: '3.8'
+
+# Definición de los servicios para la app de peces exoticos (MongoDB y el servidor gRPC)
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb_peces
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  grpc_server:
+    image: python:3.11-slim
+    container_name: grpc_server_peces
+    volumes:
+      - .:/app
+    working_dir: /app
+    ports:
+      - "50051:50051" # Puerto para gRPC que se usara en Postman
+    command: sh -c "pip install -r requirements.txt && python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. peces.proto && python server.py"
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:
