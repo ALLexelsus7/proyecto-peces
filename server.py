@@ -11,7 +11,7 @@ import peces_pb2_grpc
 # Conexión a MongoDB (con el nombre del servicio asignado en Docker)
 client = MongoClient("mongodb://mongodb:27017/")
 db = client["tienda_peces"]
-collection = db["productos"] [cite: 68]
+collection = db["productos"]
 
 # Implementacion del servicio gRPC definido en el proto, con metodos para CRUD de peces exoticos
 class PezServiceServicer(peces_pb2_grpc.PezServiceServicer):
@@ -29,7 +29,10 @@ class PezServiceServicer(peces_pb2_grpc.PezServiceServicer):
             "imagen_url": request.imagen_url,
             "activo": True # Por defecto inicia activo
         }
+        # PyMongo inyecta el "_id" en el diccionario aqui
         resultado = collection.insert_one(nuevo_pez)
+        # pero lo remuevo para que no choque con gRPC al esperar el campo '_id' que no esta definido en el proto
+        nuevo_pez.pop("_id", None)
         
         return peces_pb2.Pez(
             id=str(resultado.inserted_id),
@@ -51,9 +54,14 @@ class PezServiceServicer(peces_pb2_grpc.PezServiceServicer):
             precio=documento["precio"],
             stock=documento["stock"],
             categoria=documento["categoria"],
-            estado=documento["estado"],
+            estado=documento["estado"], 
             imagen_url=documento["imagen_url"],
             activo=documento["activo"]
+            # Ojo, se puede usar la sintaxis: estado=documento.get("estado", [])
+            # para evitar errores si el campo no existe y llenarlo con un valor por defecto,
+            # pero en este caso se asume que siempre estará presente.
+            # Se usa al agregar campos nuevos, opcionales o si se sospecha que algunos 
+            # documentos pueden no tener ese campo.
         )
 
     def UpdatePez(self, request, context):

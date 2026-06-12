@@ -1,0 +1,68 @@
+# ==========================================
+# Python
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ==========================================
+# gRPC (Archivos Autogenerados)
+# ==========================================
+# Es buena práctica de arquitectura NO subir el código generado.
+# El archivo .proto es la "fuente de la verdad". Los archivos _pb2
+# se deben compilar localmente o dentro del contenedor de Docker.
+*_pb2.py
+*_pb2_grpc.py
+
+# ==========================================
+# Entorno y Seguridad (¡CRUCIAL!)
+# ==========================================
+.env
+.env.local
+.env.*.local
+*.secret
+*.pem
+*.key
+
+# ==========================================
+# Docker & Bases de Datos locales
+# ==========================================
+# Por si acaso decides guardar datos de Mongo en carpetas locales en vez de volúmenes de Docker
+.docker/
+data/
+db_data/
+
+# ==========================================
+# Editor de Código (VSCode) y Sistema Operativo
+# ==========================================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Archivos del Sistema
+.DS_Store
+Thumbs.db
+desktop.ini

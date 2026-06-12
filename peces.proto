@@ -1,6 +1,6 @@
 // Definicion basica del archivo + los datos del pez
 syntax = "proto3";
-
+// Definición del paquete para organizar los mensajes y servicios relacionados con los peces.
 package peces;
 
 // Aqui se define la estrucutra del pez, con sus atributos basicos.
@@ -28,12 +28,12 @@ message CreatePezRequest {
   repeated string estado = 7;
   string imagen_url = 8;
 }
-
 message ReadPezRequest { string id = 1; }
 message UpdatePezRequest { Pez pez = 1; }
 message DeletePezRequest { string id = 1; }
 message DeletePezResponse { bool success = 1; string mensaje = 2; }
 
+// Definición del servicio gRPC con los métodos para CRUD de peces exoticos
 service PezService {
   rpc CreatePez (CreatePezRequest) returns (Pez);
   rpc ReadPez (ReadPezRequest) returns (Pez);

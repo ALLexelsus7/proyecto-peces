@@ -1,6 +1,7 @@
-version: '3.8'
+# Antes se ponia la version del formato de Docker Compose
+#version: '3.8'
 
-# Definición de los servicios para la app de peces exoticos (MongoDB y el servidor gRPC)
+# Definición de los servicios para la app (MongoDB y el servidor gRPC)
 services:
   mongodb:
     image: mongo:6.0
@@ -11,16 +12,18 @@ services:
       - mongo_data:/data/db
 
   grpc_server:
-    image: python:3.11-slim
+    # Usa el Dockerfile para construir la imagen del servidor gRPC
+    build: .
     container_name: grpc_server_peces
-    volumes:
-      - .:/app
-    working_dir: /app
+    # Puerto para gRPC que se usara en Postman
     ports:
-      - "50051:50051" # Puerto para gRPC que se usara en Postman
-    command: sh -c "pip install -r requirements.txt && python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. peces.proto && python server.py"
+      - "50051:50051" 
     depends_on:
       - mongodb
+    # Espejea el codigo fuente al contenedor
+    volumes:
+      - .:/app    
 
+# Volumen que almacena los datos de MongoDB incluso si el contenedor se detiene o elimina
 volumes:
   mongo_data:
