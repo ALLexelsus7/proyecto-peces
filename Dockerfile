@@ -1,3 +1,5 @@
+# El dockerfile se usa para crear una imagen de Docker que contenga todo lo necesario para ejecutar el servidor gRPC de peces exoticos.
+# como Python, las dependencias, el código fuente, y la compilación de los archivos .proto.
 # Imagen ligera de Python
 FROM python:3.11-slim
 
